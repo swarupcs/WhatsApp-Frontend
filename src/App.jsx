@@ -1,9 +1,23 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//Pages
+import Home from './pages/home';
+import Login from './pages/login';
+import Register from './pages/register';
+
 import './App.css';
 
 function App() {
   return (
     <>
-      <div class='bg-dark_bg_1 dark:bg-dark_bg_2'>Hello</div>
+      <div className='dark'>
+        <Router>
+          <Routes>
+            <Route exact path='/' element={<Home />} />
+            <Route exact path='/login' element={<Login />} />
+            <Route exact path='/register' element={<Register />} />
+          </Routes>
+        </Router>
+      </div>
     </>
   );
 }
