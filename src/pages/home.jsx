@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Sidebar } from '../components/sidebar';
 import { getConversations } from '../features/chatSlice';
@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className='min-h-screen dark:bg-dark_bg_1 flex items-center justify-center py-[19px] overflow-hidden'>
       {/*container*/}
-      <div className='container min-h-screen flex'>
+      <div className='container min-h-screen'>
         {/*Sidebar*/}
         <Sidebar />
       </div>

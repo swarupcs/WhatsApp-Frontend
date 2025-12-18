@@ -147,4 +147,17 @@
       transform: rotate(0deg);
     }
   }
+
+    /*----Custom scrollbar----*/
+  .scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #444e54;
+  }
 }
