@@ -21,7 +21,7 @@ export default function Home() {
       <div className='container h-screen flex py-[19px]'>
         {/*Sidebar*/}
         <Sidebar />
-        {activeConversation._id ? 'home' : <WhatsappHome />}
+        {activeConversation._id ? <ChatContainer /> : <WhatsappHome />}
       </div>
     </div>
   );
