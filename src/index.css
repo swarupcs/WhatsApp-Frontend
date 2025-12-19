@@ -1,37 +1,37 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-dark_bg_1: #111B21;
-  --color-dark_bg_2: #202C33;
+  --color-dark_bg_1: #111b21;
+  --color-dark_bg_2: #202c33;
   --color-dark_bg_3: #182229;
-  --color-dark_bg_4: #222E35;
+  --color-dark_bg_4: #222e35;
   --color-dark_bg_5: #233138;
-  --color-dark_bg_6: #101A20;
+  --color-dark_bg_6: #101a20;
 
-  --color-dark_border_1: #222D34;
-  --color-dark_border_2: #313D45;
+  --color-dark_border_1: #222d34;
+  --color-dark_border_2: #313d45;
 
-  --color-dark_hover_1: #2A3942;
+  --color-dark_hover_1: #2a3942;
 
-  --color-dark_svg_1: #AEBAC1;
-  --color-dark_svg_2: #8696A0;
+  --color-dark_svg_1: #aebac1;
+  --color-dark_svg_2: #8696a0;
 
-  --color-blue_1: #53BDEB;
-  --color-blue_2: #3E7B96;
+  --color-blue_1: #53bdeb;
+  --color-blue_2: #3e7b96;
 
-  --color-dark_text_1: #E9EDEF;
-  --color-dark_text_2: #8696A0;
-  --color-dark_text_3: #8696A0;
-  --color-dark_text_4: #D1D6D8;
-  --color-dark_text_5: #99BEB7;
+  --color-dark_text_1: #e9edef;
+  --color-dark_text_2: #8696a0;
+  --color-dark_text_3: #8696a0;
+  --color-dark_text_4: #d1d6d8;
+  --color-dark_text_5: #99beb7;
 
   --color-dark_scrollbar: #374045;
 
-  --color-green_1: #00A884;
+  --color-green_1: #00a884;
   --color-green_2: #008069;
-  --color-green_3: #005C4B;
+  --color-green_3: #005c4b;
   --color-green_4: #025144;
 }
 
@@ -78,8 +78,7 @@
   }
 
   .input {
-    @apply 
-      w-full 
+    @apply w-full 
       dark:bg-dark_bg_2 
       p-1.5 
       dark:text-dark_text_1 
@@ -112,8 +111,7 @@
   .fileThumbnail:hover .removeFileIcon {
     display: block;
   }
-
-  .callbg {
+  css-obio5r-control:hover .callbg {
     background-image: linear-gradient(black, black),
       url(https://res.cloudinary.com/dmhcnhtng/image/upload/v1677358270/Untitled-1_copy_rpx8yb.jpg);
     background-size: cover;
@@ -151,7 +149,7 @@
     }
   }
 
-    /*----Custom scrollbar----*/
+  /*----Custom scrollbar----*/
   .scrollbar::-webkit-scrollbar {
     width: 5px;
   }
@@ -194,7 +192,7 @@
   }
 
   .epr-category-nav .epr-active::after {
-    content: "";
+    content: '';
     width: 140px;
     height: 4px;
     background: #00a884;
@@ -247,6 +245,96 @@
     }
     100% {
       transform: translateY(0);
+    }
+  }
+
+    /* ---------------- React Select Overrides ---------------- */
+
+  .css-obio5r-control {
+    box-shadow: none !important;
+  }
+
+  .css-obio5r-control:hover {
+    border-color: transparent !important;
+  }
+
+  .css-1hb7zxy-IndicatorsContainer {
+    display: none !important;
+  }
+
+  .css-1p3m7a8-multiValue {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid #025144;
+    border-radius: 5px !important;
+  }
+
+  .css-1p3m7a8-multiValue span {
+    color: #fff !important;
+  }
+
+  .css-1p3m7a8-multiValue span:hover {
+    background: transparent !important;
+  }
+
+  .css-tj5bde-Svg {
+    background: red;
+    border-radius: 50%;
+  }
+
+  .css-12a83d4-MultiValueRemove:hover {
+    background: transparent !important;
+  }
+
+  .css-12a83d4-MultiValueRemove:hover svg {
+    fill: #fff !important;
+  }
+
+  .css-qbdosj-Input input {
+    color: #fff !important;
+  }
+
+  .css-1nmdiq5-menu {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid #025144;
+    border-radius: 5px !important;
+  }
+
+  .css-1n6sfyn-MenuList {
+    background: transparent !important;
+  }
+
+  /* ---------------- React Select Scrollbar ---------------- */
+
+  .css-1n6sfyn-MenuList::-webkit-scrollbar {
+    width: 6px !important;
+  }
+
+  .css-1n6sfyn-MenuList::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  .css-1n6sfyn-MenuList::-webkit-scrollbar-thumb {
+    background: #444e54 !important;
+  }
+
+  .css-10wo9uf-option span {
+    color: #fff !important;
+  }
+
+  /* ---------------- Animation ---------------- */
+
+  .createGroupAnimation {
+    animation: cga 0.5s forwards;
+  }
+
+  @keyframes cga {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
     }
   }
 }

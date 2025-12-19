@@ -163,17 +163,17 @@ function Home({ socket }) {
     socket.on('stop typing', () => setTyping(false));
   }, []);
   return (
-      <>
-      <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center overflow-hidden">
+    <>
+      <div className='h-screen dark:bg-dark_bg_1 flex items-center justify-center overflow-hidden'>
         {/*container*/}
-        <div className="container h-screen flex py-[19px]">
+        <div className='container h-screen flex py-[19px]'>
           {/*Sidebar*/}
           <Sidebar onlineUsers={onlineUsers} typing={typing} />
           {activeConversation._id ? (
             <ChatContainer
               onlineUsers={onlineUsers}
-              typing={typing}
               callUser={callUser}
+              typing={typing}
             />
           ) : (
             <WhatsappHome />
@@ -182,7 +182,7 @@ function Home({ socket }) {
       </div>
       {/*Call*/}
 
-      <div className={(show || call.signal) && !call.callEnded ? "" : "hidden"}>
+      <div className={(show || call.signal) && !call.callEnded ? '' : 'hidden'}>
         <Call
           call={call}
           setCall={setCall}
