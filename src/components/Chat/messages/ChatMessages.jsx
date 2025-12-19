@@ -21,6 +21,7 @@ export default function ChatMessages() {
               me={user._id === message.sender._id}
             />
           ))}
+        {/* <div ref={endRef}></div> */}
       </div>
     </div>
   );
