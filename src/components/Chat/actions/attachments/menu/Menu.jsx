@@ -5,7 +5,7 @@ import {
   PhotoIcon,
   PollIcon,
   StickerIcon,
-} from '../../../../svg';
+} from '../../../../../svg';
 
 export default function Menu() {
   return (

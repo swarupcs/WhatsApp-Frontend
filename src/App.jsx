@@ -20,11 +20,13 @@ const socket = io(import.meta.env.VITE_API_ENDPOINT.split('/api/v1')[0]);
 import './App.css';
 
 function App() {
-  const [connected, setConnected] = useState(false);
+  //const [connected, setConnected] = useState(false);
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+    const { files } = useSelector((state) => state.chat);
+    console.log('files', files);
   const { token } = user;
 
-    const dispatch = useDispatch();
   return (
     <>
       <div className='dark'>
