@@ -1,25 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Peer from 'simple-peer';
+import { ChatContainer, WhatsappHome } from '../components/Chat';
 import { Sidebar } from '../components/sidebar';
+import SocketContext from '../context/SocketContext';
 import {
   getConversations,
   updateMessagesAndConversations,
 } from '../features/chatSlice';
-import { WhatsappHome } from '../components/Chat';
-import SocketContext from '../context/SocketContext';
-import Call from '../components/Chat/call/Call';
 import {
   getConversationId,
   getConversationName,
   getConversationPicture,
 } from '../utils/chat';
+//------------
+import VideoCall from '../components/Chat/call/VideoCall';
+//------------
 const callData = {
   socketId: '',
-  receiveingCall: false,
-  callEnded: false,
   name: '',
   picture: '',
   signal: '',
+  receivingCall: false,
+  callEnded: false,
 };
 
 function Home({ socket }) {
@@ -30,13 +33,14 @@ function Home({ socket }) {
   //call
   const [call, setCall] = useState(callData);
   const [stream, setStream] = useState();
+  const [callAccepted, setCallAccppted] = useState();
   const [show, setShow] = useState(false);
-  const { receiveingCall, callEnded, socketId } = call;
-  const [callAccepted, setCallAccepted] = useState(false);
-  const [totalSecInCall, setTotalSecInCall] = useState(0);
+  const [total, setTotal] = useState(0);
+  //--call ref
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
+
   //typing
   const [typing, setTyping] = useState(false);
   //join user into the socket io
@@ -47,11 +51,10 @@ function Home({ socket }) {
       setOnlineUsers(users);
     });
   }, [user]);
-  console.log('activeConversation', activeConversation);
 
   //call
   useEffect(() => {
-    setupMedia();
+    setup();
     socket.on('setup socket', (id) => {
       setCall({ ...call, socketId: id });
     });
@@ -62,20 +65,28 @@ function Home({ socket }) {
         name: data.name,
         picture: data.picture,
         signal: data.signal,
-        receiveingCall: true,
+        receivingCall: true,
       });
     });
-    socket.on('end call', () => {
+    socket.on('leaveCall', () => {
       setShow(false);
-      setCall({ ...call, callEnded: true, receiveingCall: false });
+      setCall({ ...call, callEnded: true });
       myVideo.current.srcObject = null;
-      if (callAccepted) {
-        connectionRef?.current?.destroy();
-      }
+      //connectionRef.current.destroy();
     });
   }, []);
-  //--call user funcion
-  const callUser = () => {
+  const setup = () => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+      });
+  };
+  const enableMedia = () => {
+    myVideo.current.srcObject = stream;
+    setShow(true);
+  };
+  const callUser = (id) => {
     enableMedia();
     setCall({
       ...call,
@@ -90,8 +101,8 @@ function Home({ socket }) {
     peer.on('signal', (data) => {
       socket.emit('call user', {
         userToCall: getConversationId(user, activeConversation.users),
-        signal: data,
-        from: socketId,
+        signalData: data,
+        from: call.socketId,
         name: user.name,
         picture: user.picture,
       });
@@ -99,51 +110,40 @@ function Home({ socket }) {
     peer.on('stream', (stream) => {
       userVideo.current.srcObject = stream;
     });
-    socket.on('call accepted', (signal) => {
-      setCallAccepted(true);
+    socket.on('callAccepted', (signal) => {
+      setCallAccppted(true);
       peer.signal(signal);
     });
+
     connectionRef.current = peer;
   };
-  //--answer call  funcion
   const answerCall = () => {
     enableMedia();
-    setCallAccepted(true);
+    setCallAccppted(true);
     const peer = new Peer({
       initiator: false,
       trickle: false,
       stream: stream,
     });
     peer.on('signal', (data) => {
-      socket.emit('answer call', { signal: data, to: call.socketId });
+      socket.emit('answerCall', { signal: data, to: call.socketId });
     });
     peer.on('stream', (stream) => {
       userVideo.current.srcObject = stream;
     });
+
     peer.signal(call.signal);
     connectionRef.current = peer;
   };
-  //--end call  funcion
-  const endCall = () => {
-    setShow(false);
-    setCall({ ...call, callEnded: true, receiveingCall: false });
+
+  const leaveCall = () => {
+    setCall({ ...call, callEnded: true });
     myVideo.current.srcObject = null;
-    socket.emit('end call', call.socketId);
-    connectionRef?.current?.destroy();
-  };
-  //--------------------------
-  const setupMedia = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStream(stream);
-      });
+    socket.emit('leaveCall', call.socketId);
+    connectionRef.current.destroy();
   };
 
-  const enableMedia = () => {
-    myVideo.current.srcObject = stream;
-    setShow(true);
-  };
+  //--------------------------
 
   //get Conversations
   useEffect(() => {
@@ -151,8 +151,6 @@ function Home({ socket }) {
       dispatch(getConversations(user.token));
     }
   }, [user]);
-
-  //listening to received messages
   useEffect(() => {
     //lsitening to receiving a message
     socket.on('receive message', (message) => {
@@ -163,10 +161,10 @@ function Home({ socket }) {
     socket.on('stop typing', () => setTyping(false));
   }, []);
   return (
-      <>
-      <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center overflow-hidden">
+    <>
+      <div className='h-screen dark:bg-dark_bg_1 flex items-center justify-center overflow-hidden'>
         {/*container*/}
-        <div className="container h-screen flex py-[19px]">
+        <div className='container h-screen flex py-[19px]'>
           {/*Sidebar*/}
           <Sidebar onlineUsers={onlineUsers} typing={typing} />
           {activeConversation._id ? (
@@ -181,20 +179,22 @@ function Home({ socket }) {
         </div>
       </div>
       {/*Call*/}
-
-      <div className={(show || call.signal) && !call.callEnded ? "" : "hidden"}>
-        <Call
-          call={call}
-          setCall={setCall}
-          callAccepted={callAccepted}
-          myVideo={myVideo}
-          userVideo={userVideo}
+      <div className={(show || call.signal) && !call.callEnded ? '' : 'hidden'}>
+        <VideoCall
           stream={stream}
+          myVideo={myVideo}
+          callAccepted={callAccepted}
+          callEnded={call.callEnded}
+          userVideo={userVideo}
+          name={call.name}
+          picture={call.picture}
+          callUser={callUser}
           answerCall={answerCall}
+          leaveCall={leaveCall}
+          total={total}
+          receivingCall={call.receivingCall}
+          setTotal={setTotal}
           show={show}
-          endCall={endCall}
-          totalSecInCall={totalSecInCall}
-          setTotalSecInCall={setTotalSecInCall}
         />
       </div>
     </>

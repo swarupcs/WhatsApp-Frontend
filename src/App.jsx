@@ -23,8 +23,7 @@ function App() {
   //const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-    const { files } = useSelector((state) => state.chat);
-    console.log('files', files);
+
   const { token } = user;
 
   return (
