@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import SocketContext from './context/SocketContext';
 //Pages
@@ -19,6 +19,7 @@ const socket = io(import.meta.env.VITE_API_ENDPOINT.split('/api/v1')[0]);
 import './App.css';
 
 function App() {
+    const [connected, setConnected] = useState(false);
     const { user } = useSelector((state) => state.user);
     const { token } = user;
   return (

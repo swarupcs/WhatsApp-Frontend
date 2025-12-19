@@ -102,6 +102,23 @@ export const chatSlice = createSlice({
     setActiveConversation: (state, action) => {
       state.activeConversation = action.payload;
     },
+    updateMessagesAndConversations: (state, action) => {
+      //update messages
+      let convo = state.activeConversation;
+      if (convo._id === action.payload.conversation._id) {
+        state.messages = [...state.messages, action.payload];
+      }
+      //update conversations
+      let conversation = {
+        ...action.payload.conversation,
+        latestMessage: action.payload,
+      };
+      let newConvos = [...state.conversations].filter(
+        (c) => c._id !== conversation._id
+      );
+      newConvos.unshift(conversation);
+      state.conversations = newConvos;
+    },
   },
   extraReducers(builder) {
     builder
@@ -126,23 +143,23 @@ export const chatSlice = createSlice({
       .addCase(open_create_conversation.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
-        })
+      })
       .addCase(getConversationMessages.pending, (state, action) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(getConversationMessages.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         state.messages = action.payload;
       })
       .addCase(getConversationMessages.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.payload;
       })
       .addCase(sendMessage.pending, (state, action) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(sendMessage.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         state.messages = [...state.messages, action.payload];
         let conversation = {
           ...action.payload.conversation,
@@ -155,11 +172,12 @@ export const chatSlice = createSlice({
         state.conversations = newConvos;
       })
       .addCase(sendMessage.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.payload;
       });
   },
 });
-export const { setActiveConversation } = chatSlice.actions;
+export const { setActiveConversation, updateMessagesAndConversations } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;
