@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter as Router,
   Routes,
@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import SocketContext from './context/SocketContext';
+import { logout } from './features/userSlice';
 //Pages
 import Home from './pages/home';
 import Login from './pages/login';
@@ -19,12 +20,17 @@ const socket = io(import.meta.env.VITE_API_ENDPOINT.split('/api/v1')[0]);
 import './App.css';
 
 function App() {
-    const [connected, setConnected] = useState(false);
-    const { user } = useSelector((state) => state.user);
-    const { token } = user;
+  const [connected, setConnected] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const { token } = user;
+
+    const dispatch = useDispatch();
   return (
     <>
       <div className='dark'>
+        <button onClick={() => dispatch(logout())} className='hidden'>
+          logout
+        </button>
         <SocketContext.Provider value={socket}>
           <Router>
             <Routes>
