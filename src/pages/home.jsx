@@ -154,13 +154,20 @@ function Home({ socket }) {
 
   //listening to received messages
   useEffect(() => {
-    //lsitening to receiving a message
     socket.on('receive message', (message) => {
-      dispatch(updateMessagesAndConversations(message));
+      if (message.sender._id !== user._id) {
+        dispatch(updateMessagesAndConversations(message));
+      }
     });
-    //listening when a user is typing
     socket.on('typing', (conversation) => setTyping(conversation));
     socket.on('stop typing', () => setTyping(false));
+
+    // ✅ cleanup on unmount
+    return () => {
+      socket.off('receive message');
+      socket.off('typing');
+      socket.off('stop typing');
+    };
   }, []);
   return (
     <>

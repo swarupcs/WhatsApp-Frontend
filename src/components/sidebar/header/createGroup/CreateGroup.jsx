@@ -18,12 +18,12 @@ export default function CreateGroup({ setShowCreateGroup }) {
       setSearchResults([]);
       try {
         const { data } = await axios.get(
-          `${process.env.VITE_API_API_ENDPOINT}/user?search=${e.target.value}`,
+          `${import.meta.env.VITE_API_ENDPOINT}/user?search=${e.target.value}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
             },
-          }
+          },
         );
         if (data.length > 0) {
           let tempArray = [];

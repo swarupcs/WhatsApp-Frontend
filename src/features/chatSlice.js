@@ -30,7 +30,7 @@ export const getConversations = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data.error.message);
     }
-  }
+  },
 );
 
 export const open_create_conversation = createAsyncThunk(
@@ -45,13 +45,13 @@ export const open_create_conversation = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.error.message);
     }
-  }
+  },
 );
 
 export const getConversationMessages = createAsyncThunk(
@@ -68,7 +68,7 @@ export const getConversationMessages = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data.error.message);
     }
-  }
+  },
 );
 export const sendMessage = createAsyncThunk(
   'message/send',
@@ -86,13 +86,13 @@ export const sendMessage = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.error.message);
     }
-  }
+  },
 );
 
 export const createGroupConversation = createAsyncThunk(
@@ -107,13 +107,13 @@ export const createGroupConversation = createAsyncThunk(
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.error.message);
     }
-  }
+  },
 );
 
 export const chatSlice = createSlice({
@@ -124,6 +124,14 @@ export const chatSlice = createSlice({
       state.activeConversation = action.payload;
     },
     updateMessagesAndConversations: (state, action) => {
+      console.log(
+        'incoming message convo id:',
+        action.payload.conversation._id,
+      );
+      console.log(
+        'conversations before update:',
+        state.conversations.map((c) => c._id),
+      );
       //update messages
       let convo = state.activeConversation;
       if (convo._id === action.payload.conversation._id) {
@@ -135,7 +143,7 @@ export const chatSlice = createSlice({
         latestMessage: action.payload,
       };
       let newConvos = [...state.conversations].filter(
-        (c) => c._id !== conversation._id
+        (c) => c._id !== conversation._id,
       );
       newConvos.unshift(conversation);
       state.conversations = newConvos;
@@ -200,7 +208,7 @@ export const chatSlice = createSlice({
           latestMessage: action.payload,
         };
         let newConvos = [...state.conversations].filter(
-          (c) => c._id !== conversation._id
+          (c) => c._id !== conversation._id,
         );
         newConvos.unshift(conversation);
         state.conversations = newConvos;
