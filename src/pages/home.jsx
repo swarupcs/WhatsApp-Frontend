@@ -5,7 +5,7 @@ import {
   getConversations,
   updateMessagesAndConversations,
 } from '../features/chatSlice';
-import { WhatsappHome } from '../components/Chat';
+import { ChatContainer, WhatsappHome } from '../components/Chat';
 import SocketContext from '../context/SocketContext';
 import Call from '../components/Chat/call/Call';
 import {

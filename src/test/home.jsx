@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Peer from 'simple-peer';
+import Peer from 'peerjs';
 import { ChatContainer, WhatsappHome } from '../components/Chat';
 import { Sidebar } from '../components/sidebar';
 import SocketContext from '../context/SocketContext';
