@@ -18,7 +18,7 @@ export default function CreateGroup({ setShowCreateGroup }) {
       setSearchResults([]);
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_ENDPOINT}/user?search=${e.target.value}`,
+          `${process.env.VITE_API_API_ENDPOINT}/user?search=${e.target.value}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
